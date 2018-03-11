@@ -1,11 +1,13 @@
 //! WebAssembly format library
 
+//#![no_std]
 #![warn(missing_docs)]
 
 extern crate byteorder;
 
 pub mod elements;
 pub mod builder;
+pub mod io;
 
 pub use elements::{
 	Error as SerializationError,

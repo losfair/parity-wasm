@@ -82,7 +82,7 @@ impl NameSection {
 			};
 
 			// deserialize the section size
-			VarUint32::deserialize(rdr)?;
+			let section_size = VarUint32::deserialize(rdr)?;
 
 			match subsection_type {
 				NAME_TYPE_MODULE => {
@@ -106,7 +106,10 @@ impl NameSection {
 					local_names = Some(LocalNameSubsection::deserialize(module, rdr)?);
 				},
 
-				_ => return Err(Error::UnknownNameSubsectionType(subsection_type))
+				_ => {
+					// Ignore unknown name subsections
+					for _ in 0..u32::from(section_size) { rdr.read(&mut [0u8])?; }
+				}
 			};
 		}
 
